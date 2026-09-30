@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Struk Pembayaran - Toko Retail Makmur</title>
+    <link rel="stylesheet" href="{{ asset('css/struk.css') }}">
+</head>
+<body>
+
+<div class="receipt-container">
+    <div class="receipt">
+        <!-- HEADER -->
+        <div class="store-header">
+            <img src="{{ asset('logo-toko.png') }}" class="store-logo" alt="Logo Toko">
+            <div class="store-name" id="receiptStoreName">TOKO RETAIL MAKMUR</div>
+            <div class="store-address" id="receiptStoreAddress">Jl. Contoh No. 123 • Jember</div>
+            <div class="store-phone" id="receiptStorePhone">Telp. 0812-xxxx-xxxx</div>
+        </div>
+
+        <div class="separator"></div>
+
+        <!-- TRANSACTION INFO -->
+        <div class="transaction-info">
+            <div class="transaction-row">
+                <span class="transaction-label">No. TRX</span>
+                <span class="transaction-value" id="receiptTrx">TRX-20260911-001</span>
+            </div>
+            <div class="transaction-row">
+                <span class="transaction-label">Waktu</span>
+                <span class="transaction-value" id="receiptDate">11/09/2026 15:12</span>
+            </div>
+            <div class="transaction-row">
+                <span class="transaction-label">Kasir</span>
+                <span class="transaction-value" id="receiptCashier">Admin</span>
+            </div>
+            <div class="transaction-row">
+                <span class="transaction-label">Pelanggan</span>
+                <span class="transaction-value" id="receiptCustomer">Umum</span>
+            </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <!-- ITEMS -->
+        <div id="receiptItems">
+            <div class="item">
+                <div class="item-name">Indomie Goreng</div>
+                <div class="item-detail">
+                    <span class="item-price">2 x 3.500</span>
+                    <span class="item-total">7.000</span>
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-name">Aqua 600ml</div>
+                <div class="item-detail">
+                    <span class="item-price">2 x 4.000</span>
+                    <span class="item-total">8.000</span>
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-name">Beras 5 Kg</div>
+                <div class="item-detail">
+                    <span class="item-price">1 x 75.000</span>
+                    <span class="item-total">75.000</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <!-- TOTALS -->
+        <div class="summary-row">
+            <span class="summary-label">Subtotal</span>
+            <span class="summary-value" id="receiptSubtotal">Rp 90.000</span>
+        </div>
+        <div class="summary-row" id="receiptDiscountRow">
+            <span class="summary-label">Diskon</span>
+            <span class="summary-value" id="receiptDiscount">Rp 0</span>
+        </div>
+        <div class="summary-row" id="receiptTaxRow">
+            <span class="summary-label">Pajak / PPN</span>
+            <span class="summary-value" id="receiptTax">Rp 0</span>
+        </div>
+        <div class="summary-row" id="receiptFeeRow">
+            <span class="summary-label">Biaya Lain</span>
+            <span class="summary-value" id="receiptFee">Rp 0</span>
+        </div>
+
+        <div class="summary-row grand-total">
+            <span class="summary-label">TOTAL</span>
+            <span class="summary-value" id="receiptGrandTotal">Rp 90.000</span>
+        </div>
+
+        <div class="separator"></div>
+
+        <div class="summary-row">
+            <span class="summary-label">Metode</span>
+            <span class="summary-value" id="receiptPaymentMethod">Tunai</span>
+        </div>
+        <div class="summary-row">
+            <span class="summary-label">Bayar</span>
+            <span class="summary-value" id="receiptPayment">Rp 100.000</span>
+        </div>
+        <div class="summary-row">
+            <span class="summary-label">Kembali</span>
+            <span class="summary-value" id="receiptChange">Rp 10.000</span>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="receipt-footer">
+            <div class="thank-you">TERIMA KASIH</div>
+            <div>Atas Kunjungan Anda</div>
+            <div style="margin-top:2mm; font-size:9px;">Barang yang sudah dibeli tidak dapat ditukar/dikembalikan</div>
+        </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="receipt-actions">
+        <button type="button" class="btn-print" onclick="window.print()">Cetak Struk</button>
+        <button type="button" class="btn-close" onclick="window.location.href='{{ route('kasir') }}'">Kembali ke Kasir</button>
+    </div>
+</div>
+
+<script>
+function formatRupiah(value) {
+    return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        maximumFractionDigits: 0
+    }).format(value);
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    const rawData = localStorage.getItem("pos_last_receipt");
+    if (!rawData) return; // Keep default sample receipt
+
+    try {
+        const data = JSON.parse(rawData);
+        if (data.storeName) document.getElementById("receiptStoreName").innerText = data.storeName;
+        if (data.storeAddress) document.getElementById("receiptStoreAddress").innerText = data.storeAddress;
+        if (data.storePhone) document.getElementById("receiptStorePhone").innerText = data.storePhone;
+        if (data.transactionNumber) document.getElementById("receiptTrx").innerText = data.transactionNumber;
+        if (data.date) document.getElementById("receiptDate").innerText = data.date;
+        if (data.cashier) document.getElementById("receiptCashier").innerText = data.cashier;
+        if (data.customerType) {
+            let custText = data.customerType;
+            if (data.customerPhone && data.customerPhone !== "-") {
+                custText += " (" + data.customerPhone + ")";
+            }
+            document.getElementById("receiptCustomer").innerText = custText;
+        }
+
+        if (Array.isArray(data.items) && data.items.length > 0) {
+            const itemsContainer = document.getElementById("receiptItems");
+            itemsContainer.innerHTML = data.items.map(item => `
+                <div class="item">
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-detail">
+                        <span class="item-price">${item.qty} x ${new Intl.NumberFormat("id-ID").format(item.price)}</span>
+                        <span class="item-total">${new Intl.NumberFormat("id-ID").format(item.subtotal)}</span>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        if (document.getElementById("receiptSubtotal")) {
+            document.getElementById("receiptSubtotal").innerText = formatRupiah(data.subtotal || 0);
+        }
+
+        const totalDisc = ((data.subtotal || 0) * ((data.discountPercent || 0) / 100)) + (data.discountAmount || 0);
+        if (document.getElementById("receiptDiscount")) {
+            document.getElementById("receiptDiscount").innerText = formatRupiah(totalDisc);
+        }
+        if (document.getElementById("receiptTax")) {
+            document.getElementById("receiptTax").innerText = formatRupiah(data.tax || 0);
+        }
+        if (document.getElementById("receiptFee")) {
+            document.getElementById("receiptFee").innerText = formatRupiah(data.otherFee || 0);
+        }
+        if (document.getElementById("receiptGrandTotal")) {
+            document.getElementById("receiptGrandTotal").innerText = formatRupiah(data.grandTotal || 0);
+        }
+        if (document.getElementById("receiptPaymentMethod")) {
+            document.getElementById("receiptPaymentMethod").innerText = data.paymentMethod || "Tunai";
+        }
+        if (document.getElementById("receiptPayment")) {
+            document.getElementById("receiptPayment").innerText = formatRupiah(data.payment || 0);
+        }
+        if (document.getElementById("receiptChange")) {
+            document.getElementById("receiptChange").innerText = formatRupiah(data.change || 0);
+        }
+    } catch (e) {
+        console.error("Error reading receipt data:", e);
+    }
+});
+</script>
+</body>
+</html>
