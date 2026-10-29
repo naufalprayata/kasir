@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LaporanController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -25,3 +26,8 @@ Route::get('/riwayat', function () {
 Route::get('/ditahan', function () {
     return view('kasir', ['activeTab' => 'ditahan']);
 })->name('kasir.ditahan');
+
+// Acara 30 - PDF Report dengan DomPDF (Minggu 9/2)
+Route::get('/laporan-pdf', [LaporanController::class, 'generatePDF'])->name('laporan.pdf');
+Route::get('/laporan-pdf/landscape', [LaporanController::class, 'generateLandscapePDF'])->name('laporan.pdf.landscape');
+Route::get('/laporan-buku-pdf', [LaporanController::class, 'generateBukuPDF'])->name('laporan.buku.pdf');
