@@ -40,3 +40,6 @@ Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 
 // Acara 35: Laravel Print (Konsep & Dasar ESC/POS)
 Route::get('/print-receipt', [ReceiptController::class, 'print'])->name('receipt.print');
+
+// Acara 36: Laravel Print (Studi Kasus POS Kopi Kita)
+Route::get('/print-kopi-kita', [ReceiptController::class, 'printKopiKita'])->name('receipt.kopi-kita');

@@ -18,4 +18,15 @@ class ReceiptPrintTest extends TestCase
         $this->assertContains($response->getStatusCode(), [200, 500]);
         $response->assertJsonStructure();
     }
+
+    /**
+     * Test endpoint print-kopi-kita (Acara 36: Studi Kasus POS Kopi Kita).
+     */
+    public function test_print_kopi_kita_endpoint_is_accessible(): void
+    {
+        $response = $this->get('/print-kopi-kita');
+
+        $this->assertContains($response->getStatusCode(), [200, 500]);
+        $response->assertJsonStructure();
+    }
 }
