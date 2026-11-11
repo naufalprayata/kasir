@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -31,3 +32,7 @@ Route::get('/ditahan', function () {
 Route::get('/laporan-pdf', [LaporanController::class, 'generatePDF'])->name('laporan.pdf');
 Route::get('/laporan-pdf/landscape', [LaporanController::class, 'generateLandscapePDF'])->name('laporan.pdf.landscape');
 Route::get('/laporan-buku-pdf', [LaporanController::class, 'generateBukuPDF'])->name('laporan.buku.pdf');
+
+// Acara 31 & 32 - Event Broadcast & Reverb (Setup, Integrasi, & Pengujian)
+Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
