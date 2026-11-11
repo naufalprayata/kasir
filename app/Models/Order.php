@@ -13,6 +13,10 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
+        'order_id',
+        'customer_name',
+        'gross_amount',
+        'snap_token',
         'user_id',
         'total',
         'status',
@@ -23,6 +27,7 @@ class Order extends Model
     {
         return [
             'total' => 'float',
+            'gross_amount' => 'integer',
             'items' => 'array',
         ];
     }

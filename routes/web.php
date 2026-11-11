@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\MidtransController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ReceiptController;
 use Illuminate\Support\Facades\Route;
@@ -43,3 +44,8 @@ Route::get('/print-receipt', [ReceiptController::class, 'print'])->name('receipt
 
 // Acara 36: Laravel Print (Studi Kasus POS Kopi Kita)
 Route::get('/print-kopi-kita', [ReceiptController::class, 'printKopiKita'])->name('receipt.kopi-kita');
+
+// Acara 37 & 38: Payment Gateway Midtrans (Snap Checkout & Webhook Notification)
+Route::get('/checkout', [MidtransController::class, 'index'])->name('checkout.index');
+Route::post('/checkout', [MidtransController::class, 'checkout'])->name('checkout.process');
+Route::post('/midtrans/notification', [MidtransController::class, 'notification'])->name('midtrans.notification');
